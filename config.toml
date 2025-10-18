@@ -1,4 +1,4 @@
-baseurl = "/"
+baseURL = "https://chefs-kiss.github.io/math4180/" 
 languageCode = "en-us"
 title = "MATH 4180"
 theme = "hugo-PaperMod"
