@@ -4,6 +4,7 @@ title = "MATH 4180"
 theme = "hugo-PaperMod"
 googleAnalytics = ""
 disqusShortname = ""
+enableGoogleNews = false
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.knit\\.md$", "\\.utf8\\.md$"]
 enableEmoji= true
 
