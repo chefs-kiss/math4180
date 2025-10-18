@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Week 3: Visualizing Data | MATH 4180</title>
+
+<meta name="keywords" content="" />
+<meta name="description" content="Grammar of Graphics &amp; ggplot cont’d
+This week we will be discussing ggplot functionality.
+    Tasks Notes Links Due    Webinar Tutorial about R Markdown basics. Post any questions in the questions channel. Watch when it suits your schedule. 📼   Webinar Tutorial about dplyr Post any questions in the questions channel. 📼 Watch at least the first half before Wed meeting  Primers Check out with Work with Data and Tidy Your Data.">
+<meta name="author" content="">
+<link rel="canonical" href="/data-viz-ggplot/" />
+<link href="/assets/css/stylesheet.min.d070982e74499bfc7e365ce059942e04be78ff23f45ff9cd1e58831f2cc279c7.css" integrity="sha256-0HCYLnRJm/x&#43;NlzgWZQuBL54/yP0X/nNHliDHyzCecc=" rel="preload stylesheet"
+    as="style">
+
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+<meta property="og:title" content="Week 3: Visualizing Data" />
+<meta property="og:description" content="Grammar of Graphics &amp; ggplot cont’d
+This week we will be discussing ggplot functionality.
+    Tasks Notes Links Due    Webinar Tutorial about R Markdown basics. Post any questions in the questions channel. Watch when it suits your schedule. 📼   Webinar Tutorial about dplyr Post any questions in the questions channel. 📼 Watch at least the first half before Wed meeting  Primers Check out with Work with Data and Tidy Your Data." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/data-viz-ggplot/" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Week 3: Visualizing Data"/>
+<meta name="twitter:description" content="Grammar of Graphics &amp; ggplot cont’d
+This week we will be discussing ggplot functionality.
+    Tasks Notes Links Due    Webinar Tutorial about R Markdown basics. Post any questions in the questions channel. Watch when it suits your schedule. 📼   Webinar Tutorial about dplyr Post any questions in the questions channel. 📼 Watch at least the first half before Wed meeting  Primers Check out with Work with Data and Tidy Your Data."/>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Week 3: Visualizing Data",
+  "name": "Week 3: Visualizing Data",
+  "description": "Grammar of Graphics \u0026amp;amp; ggplot cont’d\nThis week we will be discussing ggplot functionality.\n    Tasks Notes Links Due    Webinar Tutorial about R Markdown basics. Post any …",
+  "keywords": [
+    
+  ],
+  "articleBody": "  Grammar of Graphics \u0026 ggplot cont’d\nThis week we will be discussing ggplot functionality.\n    Tasks Notes Links Due    Webinar Tutorial about R Markdown basics. Post any questions in the questions channel. Watch when it suits your schedule. 📼   Webinar Tutorial about dplyr Post any questions in the questions channel. 📼 Watch at least the first half before Wed meeting  Primers Check out with Work with Data and Tidy Your Data. Post any questions in the questions channel. 🔗 Wed Jan 27  Slides Optional slide deck. Includes basic plotting techniques for ggplot 🔗   Reading from MDSR book Chapter 3. Post reading response (include one takeaway, one thing that would improve the reading, and any questions that you may have) in the reading_response_ggplot channel 📖 Quick pass through by Wed meeting; Post by Mon Feb 1  Reading from R4DS book Section 3.6-3.10. Post any questions in the reading_response_ggplot channel. Work through the rest of material in Chapter 3, including the exercises. Add the code to your .Rmd file from last week. 📖   Exercises Grammar of Graphics exercises from Chapter 3. This is the .Rmd file we will be using in-class on Wed Jan 27. Download here 🔗 🔑   ggplot Flipbook Slide deck for creating striking ggplot graphics. This is a very thorough deck so it may not  load properly on a smart device. 🔗   Reading from MDSR Chapter 4. Read through, paying attention to the code used. We will be doing exercises related to this content on Monday Feb 1 📖 Mon Feb 1    ",
+  "wordCount" : "252",
+  "inLanguage": "en",
+  "datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/data-viz-ggplot/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "MATH 4180",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/favicon.ico"
+    }
+  }
+}
+</script>
+
+
+
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+<noscript>
+    <style type="text/css">
+        .theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript>
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="/" accesskey="h" title="MATH 4180 (Alt + H)">MATH 4180</a>
+            <span class="logo-switches">
+                <span class="theme-toggle" title="(Alt + T)">
+                    <a id="theme-toggle" accesskey="t">
+                        <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                        <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </a>
+                </span>
+                
+            </span>
+        </div>
+        <ul class="menu" id="menu" onscroll="menu_on_scroll()">
+            <li>
+                <a href="/people/" title="People">
+                    <span>People</span>
+                </a>
+            </li>
+            <li>
+                <a href="/policies/" title="Policies">
+                    <span>Policies</span>
+                </a>
+            </li>
+            <li>
+                <a href="/schedule/" title="Schedule">
+                    <span>Schedule</span>
+                </a>
+            </li>
+            <li>
+                <a href="/materials/" title="Materials">
+                    <span>Materials</span>
+                </a>
+            </li></ul>
+    </nav>
+</header>
+
+    <main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">
+      Week 3: Visualizing Data
+    </h1>
+    <div class="post-description">
+      
+    </div>
+    <div class="post-meta">
+
+    </div>
+  </header> 
+
+  <div class="post-content">
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<p><strong>Grammar of Graphics &amp; ggplot cont’d</strong><br />
+<br />
+This week we will be discussing ggplot functionality.<br />
+<br />
+</p>
+<table>
+<colgroup>
+<col width="25%" />
+<col width="41%" />
+<col width="19%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tasks</th>
+<th>Notes</th>
+<th>Links</th>
+<th>Due</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Webinar</td>
+<td>Tutorial about R Markdown basics. Post any questions in the questions channel. Watch when it suits your schedule.</td>
+<td><a href="https://rstudio.com/resources/webinars/getting-started-with-r-markdown/">📼</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Webinar</td>
+<td>Tutorial about dplyr Post any questions in the questions channel.</td>
+<td><a href="https://rstudio.com/resources/additional-talks/the-grammar-and-graphics-of-data-science/">📼</a></td>
+<td>Watch at least the first half before Wed meeting</td>
+</tr>
+<tr class="odd">
+<td>Primers</td>
+<td>Check out with <strong>Work with Data</strong> and <strong>Tidy Your Data</strong>. Post any questions in the questions channel.</td>
+<td><a href="https://rstudio.cloud/learn/primers">🔗</a></td>
+<td>Wed Jan 27</td>
+</tr>
+<tr class="even">
+<td>Slides</td>
+<td>Optional slide deck. Includes basic plotting techniques for <code>ggplot</code></td>
+<td><a href="/slides/data-viz-ggplot.html">🔗</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Reading from MDSR book</td>
+<td>Chapter 3. Post reading response (include one takeaway, one thing that would improve the reading, and any questions that you may have) in the reading_response_ggplot channel</td>
+<td><a href="https://mdsr-book.github.io/mdsr2e/ch-vizII.html">📖</a></td>
+<td>Quick pass through by Wed meeting; Post by Mon Feb 1</td>
+</tr>
+<tr class="even">
+<td>Reading from R4DS book</td>
+<td>Section 3.6-3.10. Post any questions in the reading_response_ggplot channel. Work through the rest of material in Chapter 3, including the exercises. Add the code to your <strong>.Rmd</strong> file from last week.</td>
+<td><a href="https://r4ds.had.co.nz/data-visualisation.html#geometric-objects">📖</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Exercises</td>
+<td>Grammar of Graphics exercises from Chapter 3. This is the <strong>.Rmd</strong> file we will be using in-class on Wed Jan 27. Download <a href="https://math4180.netlify.app/exercises/chapter3.Rmd">here</a></td>
+<td><a href="https://math4180.netlify.app/exercises/chapter3.html">🔗</a> <a href="https://math4180.netlify.app/exercises/chapter3-key.html">🔑</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>ggplot Flipbook</td>
+<td>Slide deck for creating striking ggplot graphics. This is a very thorough deck so it <em>may not </em> load properly on a smart device.</td>
+<td><a href="https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html#5">🔗</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Reading from MDSR</td>
+<td>Chapter 4. Read through, paying attention to the code used. We will be doing exercises related to this content on Monday Feb 1</td>
+<td><a href="https://mdsr-book.github.io/mdsr2e/ch-dataI.html">📖</a></td>
+<td>Mon Feb 1</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+  <footer class="post-footer">
+  </footer>
+</article>
+    </main><footer class="footer">
+    <span>&copy; 2021 <a href="/">MATH 4180</a></span>
+    <span>&middot;</span>
+    <span>Powered by <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a></span>
+    <span>&middot;</span>
+    <span>Theme <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a></span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)">
+    <button class="top-link" id="top-link" type="button" accesskey="g">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+            <path d="M12 6H0l6-6z" />
+        </svg>
+    </button>
+</a>
+
+
+
+<script defer src="/assets/js/highlight.min.27cd435cc9ed6abb4b496581b151804f79f366c412620272bb94e2f5f598ebcc.js" integrity="sha256-J81DXMntartLSWWBsVGAT3nzZsQSYgJyu5Ti9fWY68w="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<script>
+    window.onload = function () {
+        if (localStorage.getItem("menu-scroll-position")) {
+            document.getElementById('menu').scrollLeft = localStorage.getItem("menu-scroll-position");
+        }
+    }
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                behavior: "smooth"
+            });
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.replaceState(null, null, `#${id}`);
+            }
+        });
+    });
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+    function menu_on_scroll() {
+        localStorage.setItem("menu-scroll-position", document.getElementById('menu').scrollLeft);
+    }
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+
+</body>
+
+</html>

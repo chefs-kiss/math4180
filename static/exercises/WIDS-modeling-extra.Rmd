@@ -1,0 +1,258 @@
+---
+title: "WIDS-modeling"
+author: "Math 4180"
+date: "2/28/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Set Up
+
+## Libraries
+You will need to install any of these packages if you do not already have them. 
+```{r load-libraries, warning=F, message=F}
+library(tidyverse)
+library(data.table) #for reading in big data from a url
+library(janitor) #for tably function (similar to table function)
+library(corrr) # for correlations
+library(skimr) # for skim function (similar to summary function)
+library(tidymodels) #for modeling
+library(themis) #for downsampling
+```
+
+
+```{r load-data, warning=F, message=F}
+training <- fread("https://math4180.netlify.app/data/TrainingWiDS2021.csv")
+dictionary <- fread("https://math4180.netlify.app/data/DataDictionaryWiDS2021.csv")
+
+training %>% skimr::skim()
+```
+
+```{r cleaning-data, eval=F, warning=F, message=F}
+diabetes <- training %>%
+  select(everything(), -contains("h1"), -V1, -encounter_id) %>%
+  mutate(gender = replace_na(gender, "Unknown")) %>%
+  mutate(ethnicity = replace_na(ethnicity, "Other/Unknown")) %>%
+  mutate(hospital_admit_source = replace_na(hospital_admit_source, "Unknown")) %>%
+  mutate(icu_admit_source = replace_na(icu_admit_source, "Unknown")) %>%
+  mutate_if(is.character, factor) %>%
+  mutate(diabetes_mellitus = as.factor(diabetes_mellitus))
+```
+
+Feature Engineering
+
+```{r}
+diabetes <- training %>%
+  select(everything(), -contains("h1"), -V1, -encounter_id) %>%
+  group_by(gender) %>%
+  mutate(height = coalesce(height, mean(height, na.rm = TRUE))) %>%
+  mutate(weight = coalesce(weight, mean(weight, na.rm = TRUE))) %>%
+  ungroup() %>%
+  mutate(bmi = (weight/(height/100)^2))%>%
+  mutate(gender = replace_na(gender, "Unknown")) %>%
+  mutate(ethnicity = replace_na(ethnicity, "Other/Unknown")) %>%
+  mutate(diabetes_mellitus = factor(diabetes_mellitus))
+```
+
+```{r, eval=F}
+diabetes <- diabetes %>% 
+  mutate(bmi_cats = case_when(bmi < 18.5 ~ "Underweight",
+                              18.5 <= bmi & bmi <25 ~ "Normal",
+                              25 <= bmi & bmi < 30 ~ "Overweight",
+                              30 <= bmi & bmi < 35 ~ "Class I Obesity",
+                              35 <= bmi & bmi < 40 ~ "Class II Obesity",
+                              40 <= bmi  ~ "Class III Obesity",
+                              TRUE ~ "Unknown")) %>%
+  mutate(age_cats = case_when(15 <= age & age <25  ~ "Youth",
+                              25 <= age & age < 65 ~ "Adult",
+                              age >= 65 ~ "Senior",
+                              TRUE ~ "Unknown")) %>%
+  mutate(across(contains("glucose"), 
+                ~ case_when( . < 60 ~ "Hypoglycemia",
+                             60 <= . & . < 70 ~ "Early Hypoglycemia",
+                             70 <= . & . <140 ~ "Normal",
+                             140 <= . & . < 200 ~ "Early Diabetic",
+                             . > 200 ~ "Diabetic",
+                             TRUE ~ "Unknown"),
+                .names = "{col}_cats")) %>%
+  mutate(across(contains("sys"), 
+                ~ case_when( . < 120 ~ "Normal",
+                             120<= . & . < 130 ~ "Elevated",
+                             130 <= . & . < 140 ~ "Hypertension Stage 1",
+                             140 <= . & . < 180 ~ "Hypertension Stage 2",
+                             180 <= . ~ "Hypertensive Crisis",
+                             TRUE ~ "Unknown"),
+                .names = "{col}_cats")) %>%
+  mutate(across(contains("diasbp"), 
+                ~ case_when( . < 80 ~ "Normal",
+                             80 <= . & . < 90~ "Hypertension Stage 1",
+                             90 <= . & . < 120 ~ "Hypertension Stage 2",
+                             180 <= . ~ "Hypertensive Crisis",
+                             TRUE ~ "Unknown"),
+                .names = "{col}_cats")) %>%
+  mutate(across(contains("creat"), 
+                ~ case_when( gender == "M" & . >= 0.6 & . <= 1.2 ~ "Normal",
+                             gender == "F" & . >= 0.5 & . <= 1.1 ~ "Normal",
+                             is.numeric(.) ~ "Abnormal",
+                             TRUE ~ "Unknown"),
+                .names = "{col}_cats")) 
+```
+
+# Modeling
+
+## Spliting data
+Set up data for model building and evaluation 
+```{r split-by-strata}
+#split data randomly but use equal proportions of target variable
+set.seed(2021)
+diabetes_split <- initial_split(diabetes, strata = diabetes_mellitus)
+
+#create new training and evaluation sets for modeling
+diabetes_train <- training(diabetes_split)
+diabetes_eval <- testing(diabetes_split)
+```
+
+Check that the strata are appropriate
+```{r strata-distribution}
+#original distribution of target variable (strata variable)
+janitor::tabyl(training$diabetes_mellitus)
+
+#new training set strata
+dim(diabetes_train)
+janitor::tabyl(diabetes_train$diabetes_mellitus)
+
+#new evaluation set strata
+dim(diabetes_eval)
+janitor::tabyl(diabetes_eval$diabetes_mellitus)
+
+```
+
+
+## Recipe
+Define recipe for modeling and apply to our new datasets
+```{r recipe_and_bake}
+diabetes_recipe <- recipe(diabetes_mellitus ~., data = diabetes_train) %>%
+  step_nzv(all_numeric(), -all_outcomes()) %>%
+  #step_rm(bmi, contains("glucose"), contains("diasp"), contains("sys"), contains("creatin")) %>%
+  step_knnimpute(age) %>%
+  step_other(all_nominal(), -all_outcomes(), threshold = 0.01) %>%
+  step_dummy(all_nominal(), -all_outcomes(), one_hot = TRUE) %>%
+  step_corr(all_numeric(), -all_outcomes(), threshold = 0.5) %>%
+  step_normalize(all_numeric()) %>%
+  step_mutate_at(all_numeric(), fn=~ if_else(is.na(.), -999, . )) %>%
+  prep()
+#apply recipe to training set
+train_baked <- bake(diabetes_recipe, new_data = diabetes_train)
+
+#apply recipe to evaluation set
+eval_baked <- bake(diabetes_recipe, new_data = diabetes_eval)
+
+
+```
+
+## Model Selection
+Declaring model selection
+```{r model-selection}
+# Specify the model: set the engine (ie what library you're using) and set the mode (regression or classification)
+log_spec <- logistic_reg() %>%
+  set_engine("glm") %>%
+  set_mode("classification")
+
+null_spec <- null_model() %>%
+  set_engine("parsnip") %>%
+  set_mode("classification")
+
+tree_spec <- decision_tree(tree_depth = 10) %>%
+  set_engine("rpart") %>%
+  set_mode("classification")
+```
+
+Fitting to our training set
+```{r model-fit}
+#fit model specification to our training data where our target variable is diabetes_mellitus
+log_fit <- log_spec %>%
+  fit(diabetes_mellitus~.,
+      data = train_baked)
+
+null_fit <- null_spec %>%
+  fit(diabetes_mellitus~.,
+      data = train_baked)
+
+tree_fit <- tree_spec %>%
+  fit(diabetes_mellitus~.,
+      data = train_baked)
+```
+
+Evaluation using the evaluation set
+```{r evaluation}
+#using the fitted data, predict the target variable for the evaluation set
+log_preds<- log_fit %>%
+  predict(eval_baked) %>%
+  bind_cols(eval_baked %>% select(diabetes_mellitus))
+
+null_preds<- null_fit %>%
+  predict(eval_baked) %>%
+  bind_cols(eval_baked %>% select(diabetes_mellitus))
+
+tree_preds<- tree_fit %>%
+  predict(eval_baked) %>%
+  bind_cols(eval_baked %>% select(diabetes_mellitus))
+```
+
+Visualizing predictions and outputting accuracy
+```{r eval-viz}
+#visualize the accuracy using a confusion matrix
+log_preds %>%
+  conf_mat(diabetes_mellitus, .pred_class) %>%
+  pluck(1) %>%
+  as_tibble() %>%
+  ggplot(aes(Prediction, Truth, alpha = n)) +
+  geom_tile(show.legend = FALSE) +
+  geom_text(aes(label = n), colour = "white", alpha = 1, size = 8)+
+  labs(title = "Logistic Predictions")
+
+null_preds %>%
+  conf_mat(diabetes_mellitus, .pred_class) %>%
+  pluck(1) %>%
+  as_tibble() %>%
+  ggplot(aes(Prediction, Truth, alpha = n)) +
+  geom_tile(show.legend = FALSE) +
+  geom_text(aes(label = n), colour = "white", alpha = 1, size = 8)+
+  labs(title = "Null Prediction")
+
+tree_preds %>%
+  conf_mat(diabetes_mellitus, .pred_class) %>%
+  pluck(1) %>%
+  as_tibble() %>%
+  ggplot(aes(Prediction, Truth, alpha = n)) +
+  geom_tile(show.legend = FALSE) +
+  geom_text(aes(label = n), colour = "white", alpha = 1, size = 8)+
+  labs(title = "Tree Prediction")
+  
+#output accuracy
+log_preds %>%
+  metrics(diabetes_mellitus, .pred_class) %>%
+  select(-.estimator) %>%
+  filter(.metric == "accuracy") 
+
+null_preds %>%
+  metrics(diabetes_mellitus, .pred_class) %>%
+  select(-.estimator) %>%
+  filter(.metric == "accuracy") 
+
+tree_preds %>%
+  metrics(diabetes_mellitus, .pred_class) %>%
+  select(-.estimator) %>%
+  filter(.metric == "accuracy") 
+```
+
+# Next Steps
+
+- How should we handle missing numeric values? (i.e. our vitals)
+
+- How does this model compare to a null model? How could we implement this? (hint: you can create a null model using the same set up as the logistic model we did)
+
+- What other models would be useful given that we have a binary output?
+
+- Should we include other variables?

@@ -1,0 +1,38 @@
+baseurl = "/"
+languageCode = "en-us"
+title = "MATH 4180"
+theme = "hugo-PaperMod"
+googleAnalytics = ""
+disqusShortname = ""
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.knit\\.md$", "\\.utf8\\.md$"]
+enableEmoji= true
+
+[permalinks]
+    post = "/:slug/"
+    
+[[menu.main]]
+    name = "Materials"
+    url = "/materials/"
+    weight = 4
+    
+[[menu.main]]
+    name = "Policies"
+    url = "/policies/"
+    weight = 2
+    
+[[menu.main]]
+    name = "Schedule"
+    url = "/schedule/"
+    weight = 3
+    
+[[menu.main]]
+    name = "People"
+    url = "/people/"
+    weight = 1
+    
+[params]
+    description = "A website for the MATH 4180 course at the University of Minnesota Duluth."
+
+[params.homeInfoParams]
+    Title = "Welcome to Industrial Problem Solving"
+    Content = "This class offers students the opportunity to learn the art and statistical techniques of data science with a primary focus on data analytics. The in-depth and semester long project used in this course is designed to give students breadth and depth of experience that mirrors what they will experience in the real world as a data science professional. A major portion of this course will be learning and applying statistical and computational software and tools, and techniques to answer the data question of the project. "

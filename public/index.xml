@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MATH 4180</title>
+    <link>/</link>
+    <description>Recent content on MATH 4180</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Week 1: Getting Started</title>
+      <link>/getting-started/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/getting-started/</guid>
+      <description>Introduction to the Course and Tools
+Welcome to the course! Before we start any data science we will get to know each other, the tools we will use, and the policies of the course. If you have any questions about Week 1 materials please post them on Slack (you will soon see what Slack is) under the in-class channel.
+The following is the basic set-up for all tasks required each week.</description>
+    </item>
+    
+    <item>
+      <title>Week 2: Intro to Visualizing Data</title>
+      <link>/data-viz-intro/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/data-viz-intro/</guid>
+      <description>Grammar of Graphics &amp;amp; ggplot
+This week we will be discussing what qualities makes a graphic legible and how we can use R to implement readability using the Grammar of Graphics.
+    Tasks Notes Links Due    Data Viz: intro Slides 🔗   Recap video Follow Dr. B as she overviews the tasks to do for this week 📼   Reading from MSDR book Chapter 2: Data visualization.</description>
+    </item>
+    
+    <item>
+      <title>Week 3: Visualizing Data</title>
+      <link>/data-viz-ggplot/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/data-viz-ggplot/</guid>
+      <description>Grammar of Graphics &amp;amp; ggplot cont’d
+This week we will be discussing ggplot functionality.
+    Tasks Notes Links Due    Webinar Tutorial about R Markdown basics. Post any questions in the questions channel. Watch when it suits your schedule. 📼   Webinar Tutorial about dplyr Post any questions in the questions channel. 📼 Watch at least the first half before Wed meeting  Primers Check out with Work with Data and Tidy Your Data.</description>
+    </item>
+    
+    <item>
+      <title>Week 4: Wrangling Data</title>
+      <link>/data-wrangle/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/data-wrangle/</guid>
+      <description>Data Wrangling, pipe operators, and dplyr commands
+This week we will be discussing data wrangling techniques using the dplyr functions: select, filter, arrange, mutate, summarise, group_by
+    Tasks Notes Links Due    Cheatsheets You can find these by going to Help &amp;gt; Cheatsheets in RStudio as well 🔗   Reading from MDSR book Chapter 4. Post reading response (include one takeaway, one thing that would improve the reading, and any questions that you may have) in the reading_response_wrangling channel 📖   Reading from R4DS book Chapter 5.</description>
+    </item>
+    
+    <item>
+      <title>Week 5: Missing Data</title>
+      <link>/missing-data/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/missing-data/</guid>
+      <description>Missing Data and the naniar package
+This week we will be discussing what to do when we have missing data and how to handle missingness in real-world healthcare data.
+    Tasks Notes Links Due    Reading from R4DS book Chapter 7. Pay special attention to sections 7.4 and 7.5. Post any questions in the Slack channel. 📖   Code Tutorial Explore missing values using the naniar package 🔗   naniar resource This vignette (basically a how-to for using the package) includes most of the information from the code tutorial in a scrollable format 🔗   Project Work We will begin dealing with missing data.</description>
+    </item>
+    
+    <item>
+      <title>Weeks 6-7: Feature Imputation and Engineering</title>
+      <link>/impute-data/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/impute-data/</guid>
+      <description>Imputing Data and the mice package
+We will be discussing what to do when we have to impute missing data and the process for validating whether or not certain features should be included in our analyses.
+    Tasks Notes Links Due    Project Work We will begin imputing data. Using this .Rmd go over the methods presented with your group. Ask any questions in the Slack channel 🔗   mice package  🔗   mice resource  🔗     Updates for reading material: TBD</description>
+    </item>
+    
+    <item>
+      <title>Week 8: Model Buliding</title>
+      <link>/model-build/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/model-build/</guid>
+      <description>  Building Models using recipes and evaluations from the tidymodels package 
+We will be introducing how to implement models using the tidymodels package.
+    Tasks Notes Links Due    Project Work Intro to model building. Download the .Rmd here or visit the link to view in your browser 🔗   tidymodels package  🔗   tidymodels tutorial  📼   parsnip logistic_reg() function Documentation on parameters and usage of logistic regression within the tidymodels framework 🔗   tidymodels model search For finding information and usage of models supported in the tidymodels 🔗     </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/materials/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/materials/</guid>
+      <description>Modern Data Science in R by Benjamin S. Baumer, Daniel T. Kaplan, and Nicholas J. Horton. The book is accessible for free. This is the first book of the two main books that we will use for the course.   R for Data Science by Garrett Grolemund and Hadley Wickham. The book is accessible for free. This is the second book of the two main books that we will use for the course.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/people/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/people/</guid>
+      <description>Instructor
+Dr. Tracy Bibelnieks (she/her/hers)
+tbibelni@d.umn.edu
+Office Hours Th 3-4pm CST
+Instructor
+Kim Mandery (she/her/hers)
+mande143@d.umn.edu
+Office Hours MWF 12-1:30pm CST</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/policies/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/policies/</guid>
+      <description>Course Objectives At the end of this semester you will be able to:
+ perform data visualization, data cleaning, data augmentation and data organization apply ethical uses of data in using results of data analytic discern appropriate statistical, computational, and modeling approaches to data problems write technical and nontechnical reports of data analytic insights write professional level correspondence to ask questions/gather information give professional level presentations to technical and nontechnical audiences whether in academic or industrial settings  Assessment It is our intent to design assessments that are a source of intellectual curiosity, joy, and learning rather than a source of stress.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/schedule/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/schedule/</guid>
+      <description>   Week Dates Course Topic Project Component Notes     1 Jan 13-15 Getting Started     2 Jan 18-22 Intro to Visualizations  MLK: no class M   3 Jan 25-29 Data Vizualizations using ggplot     4 Feb 1-5 Wrangling Data Team selection    5 Feb 8-12 Missing Data Submit management timeline    6 Feb 15-19 Imputing Data     7 Feb 22-26 Imputing Data     8 Mar 1-5 Model Building     9 Mar 8-12 TBD  Spring Break: no class MTu   10 Mar 15-19 TBD     11 Mar 22-26 TBD     12 Mar 29 - Apr 1 TBD     13 Apr 5-9 TBD     14 Apr 12-16 TBD     15 Apr 19-23 TBD Report revision    16 Apr 26-30 TBD Presentation practice     May 3-7  Presentations     </description>
+    </item>
+    
+  </channel>
+</rss>
